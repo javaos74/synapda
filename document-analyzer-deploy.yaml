@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synap-document-analyzer
+  namespace: synap 
+  labels:
+    app: synap-document-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: synap-document-analyzer
+  template:
+    metadata:
+      labels:
+        app: synap-document-analyzer
+    spec:
+      containers:
+      - name: synap-document-analyzer
+        image: charlescr.azurecr.io/synap/docuanalyzer:v1.1.2412
+        command: ["/bin/bash"]
+#        command: ["tail", "-f" , "/dev/null" ]
+        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh"]
+        env:
+        - name: PYTHONIOENCODING
+          value: UTF-8
+        - name: PYTHONPATH
+          value: /app/DocuAnalyzerEngine
+        - name: USERFONTS_PATH 
+          value: /app/restapi/fonts
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            nvidia.com/gpu: 1 # GPU 요청
+          requests:
+            cpu: 4
+            memory: "32Gi" # 공유 메모리 요청
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+        - name: settings
+          mountPath: /app/restapi/settings.json
+          subPath: settings.json
+        - name: license 
+          mountPath: /app/DocuAnalyzerEngine/license.dat
+          subPath: license.dat
+      volumes:
+      - name: shm
+        emptyDir:
+          medium: Memory
+      - name: settings
+        configMap:
+          name: settings
+      - name: license
+        configMap:
+          name: license 
+      nodeSelector:
+        agentpool: upstagea10

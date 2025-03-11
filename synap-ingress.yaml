@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: synap-ingress
+  namespace: synap 
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.org/proxy-connect-timeout: "30s"
+    nginx.org/proxy-read-timeout: "20s"
+    nginx.org/client-max-body-size: "20m"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "synap.myrobots.co.kr"
+    http:
+      paths:
+      - path: /da
+        pathType: Prefix 
+        backend:
+          service:
+            name: synap-document-analyzer-service
+            port:
+              number: 80
+      - path: /result/
+        pathType: Prefix 
+        backend:
+          service:
+            name: synap-document-analyzer-service
+            port:
+              number: 80
+      - path: /monitor
+        pathType: Exact 
+        backend:
+          service:
+            name: synap-document-analyzer-service
+            port:
+              number: 80
