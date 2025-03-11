@@ -56,4 +56,4 @@ spec:
         configMap:
           name: license 
       nodeSelector:
-        agentpool: upstagea10
+        agentpool: gpu 
