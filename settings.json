@@ -1,0 +1,8 @@
+{
+    "api_key" : "SNOCR-1e134b3a35bf4ea5b57288fbc4c1d26b",
+    "port": 8080,
+    "ocr_api_uri": {
+        "default": "http://127.0.0.1:62975"
+    },
+    "max_queue_work": 100
+}
