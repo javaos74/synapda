@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: synap-document-analyzer
-        image: charlescr.azurecr.io/synap/docuanalyzer:v1.1.2412
+        image: charlescr.azurecr.io/synap/docuanalyzer:v1.2.2502-3
         command: ["/bin/bash"]
 #        command: ["tail", "-f" , "/dev/null" ]
         args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh"]
