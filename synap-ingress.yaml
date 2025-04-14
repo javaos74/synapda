@@ -23,7 +23,21 @@ spec:
             name: synap-document-analyzer-service
             port:
               number: 80
+      - path: /result-all/
+        pathType: Prefix 
+        backend:
+          service:
+            name: synap-document-analyzer-service
+            port:
+              number: 80
       - path: /result/
+        pathType: Prefix 
+        backend:
+          service:
+            name: synap-document-analyzer-service
+            port:
+              number: 80
+      - path: /filestatus/
         pathType: Prefix 
         backend:
           service:
