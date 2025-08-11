@@ -17,17 +17,18 @@ spec:
     spec:
       containers:
       - name: synap-document-analyzer
-        image: charlescr.azurecr.io/synap/docuanalyzer:v1.2.2503
+        image: charlescr.azurecr.io/synap/docuanalyzer:v1.3.2507.R02.20250804
         command: ["/bin/bash"]
 #        command: ["tail", "-f" , "/dev/null" ]
-        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh"]
+        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh && sleep infinity"]
         env:
         - name: PYTHONIOENCODING
           value: UTF-8
         - name: PYTHONPATH
           value: /app/DocuAnalyzerEngine
         - name: USERFONTS_PATH 
-          value: /app/restapi/fonts
+#          value: /app/restapi/fonts
+          value: /app/custom_project/fonts
         ports:
         - containerPort: 8080
         resources:
@@ -35,7 +36,7 @@ spec:
             nvidia.com/gpu: 1 # GPU 요청
           requests:
             cpu: 4
-            memory: "32Gi" # 공유 메모리 요청
+            memory: "16Gi" # 공유 메모리 요청
         volumeMounts:
         - mountPath: /dev/shm
           name: shm
@@ -45,6 +46,9 @@ spec:
         - name: license 
           mountPath: /app/DocuAnalyzerEngine/license.dat
           subPath: license.dat
+        - name: docuanalyzer-exe-pvc
+          mountPath: /app/restapi/module/DocuAnalyzer_exe
+          subPath: DocuAnalyzer_exe
       volumes:
       - name: shm
         emptyDir:
@@ -55,5 +59,8 @@ spec:
       - name: license
         configMap:
           name: license 
+      - name: docuanalyzer-exe-pvc
+        persistentVolumeClaim:
+          claimName: synap-da-exe-pvc
       nodeSelector:
         agentpool: gpu 
