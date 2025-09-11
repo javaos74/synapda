@@ -51,3 +51,10 @@ spec:
             name: synap-document-analyzer-service
             port:
               number: 80
+      - path: /sdk/ocr
+        pathType: Exact 
+        backend:
+          service:
+            name: synap-ocr-service
+            port:
+              number: 80

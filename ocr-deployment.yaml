@@ -1,34 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: synap-document-analyzer
+  name: synap-ocr
   namespace: synap 
   labels:
-    app: synap-document-analyzer
+    app: synap-ocr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: synap-document-analyzer
+      app: synap-ocr
   template:
     metadata:
       labels:
-        app: synap-document-analyzer
+        app: synap-ocr
     spec:
       containers:
-      - name: synap-document-analyzer
-        image: charlescr.azurecr.io/synap/docuanalyzer:v1.3.2507.r04-samsung
-        command: ["/bin/bash"]
-#        command: ["tail", "-f" , "/dev/null" ]
-        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh && sleep infinity"]
+      - name: synap-ocr
+        image: charlescr.azurecr.io/synap/ocr:v2.0.2506.r04
+#        command: ["/bin/bash"]
+        command: ["tail", "-f" , "/dev/null" ]
+#        args: ["-c", "cd /app/SynapOCR && ./_startup.sh"]
         env:
         - name: PYTHONIOENCODING
           value: UTF-8
         - name: PYTHONPATH
-          value: /app/DocuAnalyzerEngine
+          value: /app/SynapOCR
         - name: USERFONTS_PATH 
-#          value: /app/restapi/fonts
-          value: /app/custom_project/fonts
+          value: /app/SynapOCR/data/fonts
         ports:
         - containerPort: 8080
         resources:
@@ -43,9 +42,9 @@ spec:
 #        - name: settings
 #          mountPath: /app/restapi/settings.json
 #          subPath: settings.json
-#        - name: license 
-#          mountPath: /app/DocuAnalyzerEngine/license.dat
-#          subPath: license.dat
+        - name: ocr-license 
+          mountPath: /app/SynapOCR/license.dat
+          subPath: license.dat
 #        - name: docuanalyzer-exe-pvc
 #          mountPath: /app/restapi/module/DocuAnalyzer_exe
 #          subPath: DocuAnalyzer_exe
@@ -56,11 +55,11 @@ spec:
 #      - name: settings
 #        configMap:
 #          name: settings
-#      - name: license
-#        configMap:
-#          name: license 
+      - name: ocr-license
+        configMap:
+          name: ocr-license 
 #      - name: docuanalyzer-exe-pvc
 #        persistentVolumeClaim:
 #          claimName: synap-da-exe-pvc
       nodeSelector:
-        agentpool: gpu 
+        agentpool: gput4 
