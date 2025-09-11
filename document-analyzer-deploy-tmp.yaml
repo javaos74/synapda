@@ -17,19 +17,18 @@ spec:
     spec:
       containers:
       - name: synap-document-analyzer
-        image: charlescr.azurecr.io/synap/docuanalyzer:v1.3.2507.r04-samsung
+        image: charlescr.azurecr.io/synap/docuanalyzer:v1.3.2507.r04
         imagePullPolicy: IfNotPresent
-        command: ["/bin/bash"]
-#        command: ["tail", "-f" , "/dev/null" ]
-        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh && sleep infinity"]
+#        command: ["/bin/bash"]
+        command: ["tail", "-f" , "/dev/null" ]
+#        args: ["-c", "cd /app/DocuAnalyzerEngine && ./docuanalyzer.sh start && cd /app/restapi && ./_startup.sh && sleep infinity"]
         env:
         - name: PYTHONIOENCODING
           value: UTF-8
         - name: PYTHONPATH
           value: /app/DocuAnalyzerEngine
         - name: USERFONTS_PATH 
-#          value: /app/restapi/fonts
-          value: /app/custom_project/fonts
+          value: /app/restapi/fonts
         ports:
         - containerPort: 8080
         resources:

@@ -18,6 +18,7 @@ spec:
       containers:
       - name: synap-ocr
         image: charlescr.azurecr.io/synap/ocr:v2.0.2506.r05
+        imagePullPolicy: IfNotPresent
         command: ["/bin/bash"]
 #        command: ["tail", "-f" , "/dev/null" ]
         args: ["-c", "cd /app/SynapOCR && source venv/bin/activate && ./_startup.sh"]
