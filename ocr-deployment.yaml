@@ -17,10 +17,10 @@ spec:
     spec:
       containers:
       - name: synap-ocr
-        image: charlescr.azurecr.io/synap/ocr:v2.0.2506.r04
-#        command: ["/bin/bash"]
-        command: ["tail", "-f" , "/dev/null" ]
-#        args: ["-c", "cd /app/SynapOCR && ./_startup.sh"]
+        image: charlescr.azurecr.io/synap/ocr:v2.0.2506.r05
+        command: ["/bin/bash"]
+#        command: ["tail", "-f" , "/dev/null" ]
+        args: ["-c", "cd /app/SynapOCR && source venv/bin/activate && ./_startup.sh"]
         env:
         - name: PYTHONIOENCODING
           value: UTF-8
@@ -29,7 +29,7 @@ spec:
         - name: USERFONTS_PATH 
           value: /app/SynapOCR/data/fonts
         ports:
-        - containerPort: 8080
+        - containerPort: 62975
         resources:
           limits:
             nvidia.com/gpu: 1 # GPU 요청
